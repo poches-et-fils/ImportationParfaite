@@ -51,25 +51,20 @@ Sub ToutesPochesToutesBases()
         oStyle.typebarre = Cells(n, 11)
         oStyle.couleurdebut = Cells(n, 12)
         oStyle.couleurfin = Cells(n, 13)
-        oStyle.couleursoriginales = Cells(n, 14)
+        oStyle.couleursoriginales = Cells(n, 14) 'Bug ici on ne peut pas importer un objet Array comme ça
         oStyle.googleage = Cells(n, 15)
         oStyle.a = Cells(n, 16)
         oStyle.b = Cells(n, 17)
         oStyle.seo = Cells(n, 18)
 ' Toutes les poches, toutes les bases
-        Sheets(oStyle.Page).Activate
-        Range(Sheets(oStyle.Page).Cells(2, 1), Sheets(oStyle.Page).Cells(10000, 1000)).Select
-        Selection.Clear
-        n = 2
+        FichierImportProduit.Sheets(oStyle.Page).Range(Sheets(oStyle.Page).Cells(2, 1), Sheets(oStyle.Page).Cells(10000, 1000)).Clear
+        'n = 2 'ÇA FAIT QUOI ÇA
+        
 'Integration des tabs Unepoche toutes les bases => For r = 1 To Sheets("UnePocheToutesLesBases").Cells(1, 1).CurrentRegion.Rows.Count
         For I = 1 To Sheets("poches à décliner").Cells(1, 1).CurrentRegion.Rows.Count
             Set couleursadecliner = New Collection
             Set couleursinterdites = New Collection
-            
-            If m = 2 Or m = 5 Then
-                
-'poches à ne pas décliner pour enfants
-                
+            If m = 101 Or m = 501 Then 'poches à ne pas décliner pour enfants
                 If IsInArray(Sheets("poches à décliner").Cells(I, 1), Array("0006", "0008", "0093", "0141", "C271", "C264", "C282", "C268")) Then I = I + 1
             End If
             
