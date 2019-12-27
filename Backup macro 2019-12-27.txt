@@ -1,42 +1,39 @@
 Option Compare Text
 
 Private Function IsInArray(valToBeFound As Variant, arr As Variant) As Boolean
-    'DEVELOPER: Ryan Wells (wellsr.com)
-    'DESCRIPTION: Function to check if a value is in an array of values
-    'INPUT: Pass the function a value to search for and an array of values of any data type.
-    'OUTPUT: True if is in array, false otherwise
-    Dim element     As Variant
-    On Error GoTo IsInArrayError: 'array is empty
+'DEVELOPER: Ryan Wells (wellsr.com)
+'DESCRIPTION: Function to check if a value is in an array of values
+'INPUT: Pass the function a value to search for and an array of values of any data type.
+'OUTPUT: True if is in array, false otherwise
+Dim element As Variant
+On Error GoTo IsInArrayError: 'array is empty
     For Each element In arr
         If element = valToBeFound Then
-            IsInArray = TRUE
+            IsInArray = True
             Exit Function
         End If
     Next element
-    Exit Function
-    IsInArrayError:
-    On Error GoTo 0
-    IsInArray = FALSE
+Exit Function
+IsInArrayError:
+On Error GoTo 0
+IsInArray = False
 End Function
 
 Sub ToutesPochesToutesBases()
-    Application.Calculation = xlCalculationManual
-    Application.ScreenUpdating = FALSE
-    
-    Set ImportSource = ActiveWorkbook
+Application.Calculation = xlCalculationManual
+Application.ScreenUpdating = False
 
-    'Création du csv
-    NomUser = InputBox("Quel est ton nom de user") 'Pour le filepath
-    NomFichier = Format(Date, "yyyy-mm-dd") & "_" & InputBox("Comment veux-tu appeler le fichier?") 'Pour le filename
-    Workbooks.Add
-    
-    ActiveWorkbook.SaveAs Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\004 Web\01Outils\01ImportationProduit\" & NomFichier, Fileformat = xlCSVUTF8
-    Dim ImportFile As Workbook
-    Set ImportFile = ActiveWorkbook
-    Dim couleuradecliner As New Collection
-    Dim couleursinterdites As New Collection
-    
-    
+Set ImportSource = ActiveWorkbook
+NomUser = InputBox("Quel est ton nom de user")
+NomFichier = InputBox("Comment veux-tu appeler le fichier?")
+Workbooks.Add
+
+ActiveWorkbook.SaveAs Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\004 Web\01Outils\01ImportationProduit\" & Format(Date, "yyyy-mm-dd") & "_" & NomFichier & ".csv"
+Dim IMPORT As Workbook
+Set IMPORT = ActiveWorkbook
+Dim couleuradecliner As New Collection
+Dim couleursinterdites As New Collection
+
 For Each m In Array(8) 'numéro des pages de chandails poches
 'Vneck = 1
 'Bébé = 2
@@ -644,8 +641,8 @@ Range(Sheets(Page).Cells(1, 1), Sheets(Page).Cells(1, 46)).Select
 Selection.Copy
 
 
-ImportFile.Activate
-ImportFile.Sheets(1).Cells(1, 1).Select
+IMPORT.Activate
+IMPORT.Sheets(1).Cells(1, 1).Select
 ActiveSheet.Paste
 
 
@@ -655,8 +652,8 @@ Range(Sheets(Page).Cells(2, 1), Sheets(Page).Cells(Sheets(Page).Cells(1, 1).Curr
 Selection.Copy
 
 
-ImportFile.Activate
-ImportFile.Sheets(1).Cells(ImportFile.Sheets(1).Cells(1, 1).CurrentRegion.Rows.Count + 1, 1).Select
+IMPORT.Activate
+IMPORT.Sheets(1).Cells(IMPORT.Sheets(1).Cells(1, 1).CurrentRegion.Rows.Count + 1, 1).Select
 ActiveSheet.Paste
 
 Next m
@@ -664,3 +661,4 @@ Next m
 Application.ScreenUpdating = True
 Application.Calculation = xlCalculationAutomatic
 End Sub
+
