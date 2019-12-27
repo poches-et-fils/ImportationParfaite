@@ -32,18 +32,13 @@ Sub ToutesPochesToutesBases()
     Set ImportFile = ActiveWorkbook
     Dim couleuradecliner As New Collection
     Dim couleursinterdites As New Collection
-    '1 = Vneck '3 = tshirt femme boyfriend '4 = tshirt homme '5 = tshirt ado '6 = longsleeves homme
-    '7 = longsleeves femme '8 = cami femme '9 = Cami homme '10 = robes
-    '101 = BABY TSHIRT (2)
-    '201 = WOMEN TSHIRT (?)
+    '3 = tshirt femme boyfriend '4 = tshirt homme '5 = tshirt ado '6 = longsleeves homme
+    '7 = longsleeves femme '8 = cami femme '9 = Cami homme
     '202 = WOMEN TANKTOP (9)
-    '203 = WOMEN VNECK (1)
-    '210 = WOMEN DRESS (10)
     '212 = WOMEN LSTSHIRT (7)
     '217 = WOMEN TSHIRT BOYFRIEND (3)
     '301 = MEN TSHIRT (4)
     '302 = MEN TANKTOP (9)
-    '312 = MEN LSTSHIRT (6)
     '501 = KID TSHIRT (5)
     For Each m In Array(101) 'numéro des pages de chandails poches
         'FichierImportProduit.Activate 'Est-ce nécessaire à cet endroit ? Je ne crois pas
@@ -70,165 +65,6 @@ Sub ToutesPochesToutesBases()
         oStyle.a = Cells(n, 16)
         oStyle.b = Cells(n, 17)
         oStyle.seo = Cells(n, 18)
-        
-        If m = 1 Then
-'design à décliner
-
-        ElseIf m = 3 Then
-            Page = "Femme TShirt" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "femme" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "femme" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "femme"
-            tagsCollections = ", collection:Boxing Day - Femme, collection:Boxing Day"
-            googlegender = "femme" 'voir onglet google merchant fr
-            prix = "20.00"
-            codetee = "217"
-            typeprod = "T-shirt à poche" ' modle seoo
-            typebarre = "t-shirt_a_poche" 'modele web
-            couleurdebut = 3
-            couleurfin = 6
-            couleursoriginales = Array(4)
-            googleage = "adultes" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 9 'premire taille à déclinerr
-            b = 13 ' dernire taillee
-            seo = "T-shirt à poche à col rond pour femme coupe Boyfriend 50% COTON 50% POLYESTER offert en noir, charbon et gris. On peut se tutoyer? Avec une belle poche de même, tu vas être funky, assumée et confortable, surtout. Porte fièrement ton chandail Poches & Fils, il est conçu et empoché par des humains à Montréal, Québec, Canada."
-            
-        ElseIf m = 4 Then
-            Page = "Homme TShirt" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "homme" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "homme" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "homme"
-            tagsCollections = ", collection:Homme, collection:Homme - Tops, collection:Homme - T-shirt à poche, collection:All"
-            googlegender = "homme" 'voir onglet google merchant fr
-            prix = "20.00"
-            codetee = "301"
-            typeprod = "T-shirt à poche" ' modle seoo
-            typebarre = "t-shirt_a_poche_cer" 'modele web
-            couleurdebut = 3
-            couleurfin = 7
-            couleursoriginales = Array(10)
-            googleage = "adultes" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 9 'premire taille à déclinerr
-            b = 14 ' dernire taillee
-            seo = "T-shirt à poche à col rond pour homme 50% COTON 50% POLYESTER offert en noir, blanc, charbon et gris. Porter sa poche sur son coeur, a met du coeur sur sa poche? Porte fièrement ton chandail Poches & Fils, il est baptisé d'un nom drôle que seuls les vrais connaissent et est conçu et empoché par des humains à Montréal."
-            
-        ElseIf m = 5 Then
-            Page = "Enfant TShirt" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "enfant" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "enfant" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "enfant"
-            tagsCollections = ", collection:Enfant, collection:Enfant - T-shirt à poche, collection:All, collection:Enfant et bébé"
-            googlegender = "unisexe" 'voir onglet google merchant fr
-            prix = "30.99"
-            codetee = "501"
-            typeprod = "T-shirt à poche" ' modle seoo
-            typebarre = "t-shirt_a_poche" 'modele web
-            couleurdebut = 3
-            couleurfin = 5
-            couleursoriginales = Array(3, 4, 5)
-            googleage = "enfants" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 10 'premire taille à déclinerr
-            b = 12 ' dernire taillee
-            seo = "T-shirt à poche à col rond pour enfant 50% COTON 50% POLYESTER offert en noir, blanc et charbon. Votre enfant cherche à exprimer sa personnalité ou à matcher funky avec Maman et Papa (tout en étant cool)? #yolesjeunes! C'est facile avec un chandail Poches & Fils conçu et empoché par des humains à Montréal, Québec, Canada"
-            
-        ElseIf m = 6 Then
-            Page = "Homme Longsleeves" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "homme" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "homme" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "homme"
-            tagsCollections = ", collection:Homme, collection:Homme - Tops, collection:Homme - T-shirt à manches longues à poche, collection:All"
-            googlegender = "homme" 'voir onglet google merchant fr
-            prix = "51.99"
-            codetee = "312"
-            typeprod = "T-shirt à manches longues à poche" ' modle seoo
-            typebarre = "t-shirt_a_manches_longues_a_poche" 'modele web
-            couleurdebut = 3
-            couleurfin = 9
-            couleursoriginales = Array(3, 5, 6, 8, 9)
-            googleage = "adultes" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 9 'premire taille à déclinerr
-            b = 14 ' dernire taillee
-            seo = "T-shirt à manches longues à poche unisexe 93% COTON 7% ÄLASTHANE offert en noir, gris, charbon, bleu royal et sarcelle. On peut se tutoyer? Avec cet unique t-shirt à manches longues conçu et empoché par des humains à Montréal, Québec, Canada, tu vas pouvoir montrer ton côté givré-saucé, tout en étant aussi confortable que dans un Snuggy."
-            
-        ElseIf m = 7 Then
-            Page = "Femme Longsleeves" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "femme" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "femme" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "femme"
-            tagsCollections = ", collection:Femme, collection:Femme - Tops, collection:Femme - T-shirt à manches longues à poche, collection:All"
-            googlegender = "femme" 'voir onglet google merchant fr
-            prix = "51.99"
-            codetee = "212"
-            typeprod = "T-shirt à manches longues à poche" ' modle seoo
-            typebarre = "t-shirt_a_manches_longues_a_poche" 'modele web
-            couleurdebut = 3
-            couleurfin = 9
-            couleursoriginales = Array(3, 5, 6, 8, 9)
-            googleage = "adultes" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 9 'premire taille à déclinerr
-            b = 14 ' dernire taillee
-            seo = "T-shirt décontracté à manches longues à poche unisexe 93% COTON 7% ÄLASTHANE offert en noir, gris, charbon, bleu royal et sarcelle. On peut se tutoyer? Avec cet unique t-shirt à manches longues conçu et empoché par des humains à Montréal, Québec, Canada, tu vas pouvoir montrer ton côté givré-saucé, tout en étant aussi confortable que dans un Snuggy."
-            
-        ElseIf m = 8 Then
-            Page = "Femmes Camisoles" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "femme" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "femme" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "femme"
-            tagsCollections = ", collection:Boxing Day - Femme, collection:Boxing Day"
-            googlegender = "femme" 'voir onglet google merchant fr
-            prix = "15.00"
-            codetee = "202"
-            typeprod = "Camisole à poche" ' modle seoo
-            typebarre = "camisole_a_poche" 'modele web
-            couleurdebut = 3
-            couleurfin = 5
-            couleursoriginales = Array(3, 4, 5)
-            googleage = "adultes" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 9 'premire taille à déclinerr
-            b = 13 ' dernire taillee
-            seo = "Camisole à poche pour femme 50% COTON 50% POLYESTER offert en noir, blanc et charbon. Que tu aimes avoir les aisselles au vent et/ou montrer ta poche au gym, avec cette camisole, tu vas être funky et confortable. Porte fièrement ton chandail Poches & Fils, il est conçu et empoché par des humains à Montréal, Québec, Canada."
-            
-        ElseIf m = 9 Then
-            Page = "Hommes Camisoles" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "homme" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "homme" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "homme"
-            tagsCollections = ", collection:Boxing Day - Homme, collection:Boxing Day"
-            googlegender = "homme" 'voir onglet google merchant fr
-            prix = "15.00"
-            codetee = "302"
-            typeprod = "Camisole à poche" ' modle seoo
-            typebarre = "camisole_a_poche" 'modele web
-            couleurdebut = 3
-            couleurfin = 5
-            couleursoriginales = Array(3, 4)
-            googleage = "adultes" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 9 'premire taille à déclinerr
-            b = 14 ' dernire taillee
-            seo = "Camisole à poche pour homme 50% COTON 50% POLYESTER offert en noir, blanc et charbon. Que tu aimes avoir les aisselles au vent et/ou montrer ta poche au gym, avec cette camisole, tu vas être funky et confortable. Porte firement ton chandail Poches & Fils, il est conçu et empoché par des humains à Montréal, Québec, Canada."
-            
-        ElseIf m = 10 Then
-            Page = "Femmes Robes" ' ATTENTION LONGSLEEVES COULEURS
-            gender = "femme" ' bébé, enfant, homme, femme, unisexe
-            genderbarre = "femme" '  bebe, enfant, homme, femme, unisexe
-            tagsGenre = "femme"
-            tagsCollections = ", collection:Femme, collection:Femme - Tops, collection:Femme - Robe à poche, collection:All"
-            googlegender = "femme" 'voir onglet google merchant fr
-            prix = "56.99"
-            codetee = "210"
-            typeprod = "Robe à poche" ' modle seoo
-            typebarre = "robe_a_poche" 'modele web
-            couleurdebut = 3
-            couleurfin = 9
-            couleursoriginales = Array(3, 5, 6, 8, 9)
-            googleage = "adultes" 'voir onglet google merchant fr / ATTENTION BÄBÄS ET PETIT KID
-            a = 9 'premire taille à déclinerr
-            b = 13 ' dernire taillee
-            seo = "Robe à poche semi-ajustée (qui n’est pas un t-shirt) 93% COTON 7% ÉLASTHANE offert en noir, gris et charbon. Son tissu soyeux - touche-le - est assez épais pour cacher ce qu’il faut, sans être trop chaud. Cette robe est comme toi: polyvalente, belle, confortable dans toutes les situations et prête pour l’été!"
-            
-        End If
-        
-        
 ' Toutes les poches, toutes les bases
         Sheets(Page).Activate
         Range(Sheets(Page).Cells(2, 1), Sheets(Page).Cells(10000, 1000)).Select
@@ -253,13 +89,6 @@ Sub ToutesPochesToutesBases()
                 If CStr(Sheets("couleurs prioritaires").Cells(1, k)) = "Do not do" Then col_interdite = k
                 
                 Next k
-                
-                
-                
-                
-                
-                
-                
                 For k = 2 To Sheets("couleurs prioritaires").Cells(1, 1).CurrentRegion.Rows.Count
                     
                     If CStr(Sheets("couleurs prioritaires").Cells(k, 1)) = CStr(Sheets("poches à décliner").Cells(I, 1)) Then
