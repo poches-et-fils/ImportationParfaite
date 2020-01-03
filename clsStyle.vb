@@ -12,7 +12,7 @@ public typeprod as String
 public typebarre as String
 public couleurdebut as Byte
 public couleurfin as Byte
-public couleursoriginales as Object
+public couleursoriginales as Variant
 public googleage as String
 public a as Byte
 public b as Byte
