@@ -27,7 +27,7 @@ Sub ToutesPochesToutesBases()
     Workbooks.Add
     
     ActiveWorkbook.SaveAs Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\004 Web\01Outils\01ImportationProduit\" & NomFichier
-    'TODO: Intégrer l'arfument Fileformat = xlCSVUTF8
+    'TODO: Intégrer l'argument Fileformat = xlCSVUTF8
     Dim ImportFile As Workbook
     Set ImportFile = ActiveWorkbook
     Dim couleuradecliner As New Collection
@@ -51,16 +51,16 @@ Sub ToutesPochesToutesBases()
         oStyle.typebarre = Cells(n, 11)
         oStyle.couleurdebut = Cells(n, 12)
         oStyle.couleurfin = Cells(n, 13)
-        oStyle.couleursoriginales = Cells(n, 14) 'Bug ici on ne peut pas importer un objet Array comme ça
+        oStyle.couleursoriginales = Split(Cells(n, 14), ",")
         oStyle.googleage = Cells(n, 15)
         oStyle.a = Cells(n, 16)
         oStyle.b = Cells(n, 17)
         oStyle.seo = Cells(n, 18)
-' Toutes les poches, toutes les bases
-        FichierImportProduit.Sheets(oStyle.Page).Range(Sheets(oStyle.Page).Cells(2, 1), Sheets(oStyle.Page).Cells(10000, 1000)).Clear
+        FichierImportProduit.Sheets(oStyle.Page).Activate
+        Range(Sheets(oStyle.Page).Cells(2, 1), Sheets(oStyle.Page).Cells(10000, 1000)).Select
+        Selection.Clear
         'n = 2 'ÇA FAIT QUOI ÇA
-        
-'Integration des tabs Unepoche toutes les bases => For r = 1 To Sheets("UnePocheToutesLesBases").Cells(1, 1).CurrentRegion.Rows.Count
+        'Integration des tabs Unepoche toutes les bases => For r = 1 To Sheets("UnePocheToutesLesBases").Cells(1, 1).CurrentRegion.Rows.Count
         For I = 1 To Sheets("poches à décliner").Cells(1, 1).CurrentRegion.Rows.Count
             Set couleursadecliner = New Collection
             Set couleursinterdites = New Collection
@@ -68,8 +68,7 @@ Sub ToutesPochesToutesBases()
                 If IsInArray(Sheets("poches à décliner").Cells(I, 1), Array("0006", "0008", "0093", "0141", "C271", "C264", "C282", "C268")) Then I = I + 1
             End If
             
-            
-'à modifier
+            'à modifier
             For k = 3 To 20
                 If CStr(Sheets("couleurs prioritaires").Cells(1, k)) = CStr(codetee) Then col = k
                 If CStr(Sheets("couleurs prioritaires").Cells(1, k)) = "Do not do" Then col_interdite = k
@@ -94,7 +93,7 @@ Sub ToutesPochesToutesBases()
                         k = k + 1
                     Wend
                     
-'MsgBox (couleursinterdites(1) & couleursinterdites(2))
+        'MsgBox (couleursinterdites(1) & couleursinterdites(2))
                     
                     
                     
@@ -452,10 +451,8 @@ Sub ToutesPochesToutesBases()
                                     
                                     ImportFile.Activate
                                     ImportFile.Sheets(1).Cells(ImportFile.Sheets(1).Cells(1, 1).CurrentRegion.Rows.Count + 1, 1).Select
-                                    ActiveSheet.Paste
-                                    
-                                    Next m
-                                    
-                                    Application.ScreenUpdating = True
-                                    Application.Calculation = xlCalculationAutomatic
-                                End Sub
+                                    ActiveSheet.Paste                            
+    Next m                             
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+End Sub
