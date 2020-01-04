@@ -104,7 +104,7 @@ Sub ToutesPochesToutesBases()
                         codecouleur = Sheets("FR").Cells(p, 8)
             For j = oStyle.a To oStyle.b 'tailles à décliner
                 codetaille = Sheets("FR").Cells(j, 19)
-                If j = oStyle.aa And debut = 1 Then
+                If j = oStyle.a And debut = 1 Then
                     Sheets(oStyle.Page).Cells(n, 1) = oStyle.typebarre & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2)
                     Sheets(oStyle.Page).Cells(n, 2) = Sheets("poches à décliner").Cells(I, 3)
                     Sheets(oStyle.Page).Cells(n, 3) = Sheets("poches à décliner").Cells(I, 4)
