@@ -17,7 +17,6 @@ Private Function IsInArray(valToBeFound As Variant, arr As Variant) As Boolean
 		On Error GoTo 0
 		IsInArray = False
 	End Function
-
 Sub ToutesPochesToutesBases()
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
@@ -25,7 +24,6 @@ Sub ToutesPochesToutesBases()
     NomUser = InputBox("Quel est ton nom de user") 'Pour le filepath de sauvegarde
     NomFichier = Format(Date, "yyyy-mm-dd") & "_" & InputBox("Comment veux-tu appeler le fichier?") 'Pour le filename
     Workbooks.Add
-    
     ActiveWorkbook.SaveAs Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\004 Web\01Outils\01ImportationProduit\" & NomFichier
     'TODO: Intégrer l'argument Fileformat = xlCSVUTF8
     Dim ImportFile As Workbook
@@ -37,7 +35,7 @@ Sub ToutesPochesToutesBases()
         'Worksheets("db").Activate
         Dim db As Workbook
         Set db = Workbooks.Open(Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\008 Opérations\09 macros\ImportationParfaite\db.csv")
-        Dim oStyle As New clsStyle
+        Dim oStyle As New clsStyle 'oStyle est un objet custom qui sert à contenir tous les attributs de chaque produit et variante
         n = Application.WorksheetFunction.Match(m, Range("A1:A20"), 0)
         oStyle.Page = Cells(n, 2)
         oStyle.gender = Cells(n, 3)
@@ -60,45 +58,32 @@ Sub ToutesPochesToutesBases()
         Range(Sheets(oStyle.Page).Cells(2, 1), Sheets(oStyle.Page).Cells(10000, 1000)).Select
         Selection.Clear
         'n = 2 'ÇA FAIT QUOI ÇA
-        'Integration des tabs Unepoche toutes les bases => For r = 1 To Sheets("UnePocheToutesLesBases").Cells(1, 1).CurrentRegion.Rows.Count
+        'Integration des tabs Unepoche toutes les bases => For r = 1 To Sheets("UnePocheToutesLesBases").(...)
         For I = 1 To Sheets("poches à décliner").Cells(1, 1).CurrentRegion.Rows.Count
             Set couleursadecliner = New Collection
             Set couleursinterdites = New Collection
-            If m = 101 Or m = 501 Then 'poches à ne pas décliner pour enfants
-                If IsInArray(Sheets("poches à décliner").Cells(I, 1), Array("0006", "0008", "0093", "0141", "C271", "C264", "C282", "C268")) Then I = I + 1
+            If m = 101 Or m = 501 Then 'Ce loop skip les lignes des poches qu'on ne décline pas pour enfants
+                PochesPourAdultes = Array("0006", "0008", "0093", "0141", "C271", "C264", "C282", "C268")
+                If IsInArray(Sheets("poches à décliner").Cells(I, 1), PochesPourAdultes) Then I = I + 1
             End If
-            
-            'à modifier
-            For k = 3 To 20
+            For k = 3 To 20 'à modifier
                 If CStr(Sheets("couleurs prioritaires").Cells(1, k)) = CStr(codetee) Then col = k
                 If CStr(Sheets("couleurs prioritaires").Cells(1, k)) = "Do not do" Then col_interdite = k
-                
                 Next k
                 For k = 2 To Sheets("couleurs prioritaires").Cells(1, 1).CurrentRegion.Rows.Count
-                    
                     If CStr(Sheets("couleurs prioritaires").Cells(k, 1)) = CStr(Sheets("poches à décliner").Cells(I, 1)) Then
                         couleurfav = Sheets("couleurs prioritaires").Cells(k, col)
                         lignepoche = k
-                        
                         Exit For
                     End If
-                    
                     Next k
-                    
-                    
                     k = col_interdite
-                    
                     While Sheets("couleurs prioritaires").Cells(lignepoche, k) <> ""
                         couleursinterdites.Add (Sheets("couleurs prioritaires").Cells(lignepoche, k))
                         k = k + 1
                     Wend
-                    
-        'MsgBox (couleursinterdites(1) & couleursinterdites(2))
-                    
-                    
-                    
-                    couleurstemp = couleursoriginales
-                    
+                    'MsgBox (couleursinterdites(1) & couleursinterdites(2))  
+                    couleurstemp = oStyle.couleursoriginales
                     If IsInArray(couleurfav, couleurstemp) And couleurfav <> 3 Then
                         pos = Application.Match(couleurfav, couleurstemp, False) - 1
                         temp = couleurstemp(0)
@@ -114,82 +99,14 @@ Sub ToutesPochesToutesBases()
                             End If
                             Next Z
                             Next k
-                            
-                            nbcouleur = couleursadecliner.Count
-'MsgBox (couleursadecliner(1) & couleursadecliner(2))
-'Dim tempo(10) As Integer
-'
-'For k = 1 To nbcouleur
-'If k = 1 Then
-'    tempo(1) = couleurfav
-'    ElseIf k > pos Then
-'        tempo(k) = couleursadecliner(k)
-'    ElseIf k <= pos Then
-'    tempo(k) = couleursadecliner(k - 1)
-'
-'End If
-'
-'Next k
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-'MsgBox (couleursadecliner(1))
-                            
-'End If
-                            
+                            nbcouleur = couleursadecliner.Count                   
                             debut = 1
-                            For Each p In couleursadecliner
-'c = couleurdebut + p - 1
-'fav = 0
-'
-'  If (codetee = "312" Or codetee = "210") And (couleurfav = 4 Or couleurfav = 5 Or couleurfav = 6) Then
-'
-'ElseIf couleurfav <= couleurfin And couleurfav > couleurdebut Then
-'
-'
-'
-'fav = 1
-'    If p = 1 Then
-'    c = couleurfav
-'    End If
-'
-'    If p > 1 Then
-'    c = couleurdebut + p - 2
-'    If (codetee = "312" Or codetee = "210") And (couleurfav = 4 Or couleurfav = 5 Or couleurfav = 6) Then c = c + 1
-'
-'    If c >= couleurfav Then c = c + 1
-'    End If
-'
-'End If
-'
-'
-'
-'If codetee = "312" And c = 4 Or codetee = "312" And c = 7 Then
-'p = p + 1
-'c = c + 1 ' pas de longsleeves blanc et marine
-'End If
-'If codetee = "210" And c = 4 Or codetee = "210" And c = 7 Then
-'p = p + 1
-'c = c + 1 ' pas de robes blanc et marine
-'End If
-'If codetee = "217" And c = 4 Then
-'p = p + 1
-'c = c + 1 ' pas de boyfriend tee blanc
-'End If
-                                
+                            For Each p In couleursadecliner                                
                                 couleur = Sheets("FR").Cells(p, 9)
                                 couleurnom = Sheets("FR").Cells(p, 10)
                                 codecouleur = Sheets("FR").Cells(p, 8)
-                                
-                                
-                                For j = a To b 'tailles à décliner
+                                For j = oStyle.a To oStyle.b 'tailles à décliner
                                     codetaille = Sheets("FR").Cells(j, 19)
-                                    
-                                    
                                     If j = a And debut = 1 Then
                                         Sheets(oStyle.Page).Cells(n, 1) = typebarre & "_" & genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2)
                                         Sheets(oStyle.Page).Cells(n, 2) = Sheets("poches à décliner").Cells(I, 3)
@@ -222,8 +139,6 @@ Sub ToutesPochesToutesBases()
                                         Sheets(oStyle.Page).Cells(n, 18) = "deny"
                                         Sheets(oStyle.Page).Cells(n, 19) = "manual"
                                         Sheets(oStyle.Page).Cells(n, 20) = prix
-                                        
-                                        
                                         Sheets(oStyle.Page).Cells(n, 22) = "'true"
                                         Sheets(oStyle.Page).Cells(n, 23) = "'true"
                                         Sheets(oStyle.Page).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & typebarre & "_" & couleur & "_" & genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
@@ -238,17 +153,15 @@ Sub ToutesPochesToutesBases()
                                         Sheets(oStyle.Page).Cells(n, 34) = Left(Sheets(oStyle.Page).Cells(n, 14), 9)
                                         Sheets(oStyle.Page).Cells(n, 35) = Sheets(oStyle.Page).Cells(n, 5)
                                         Sheets(oStyle.Page).Cells(n, 37) = "neuf"
-'à modifier
+                                        'à modifier
                                         Sheets(oStyle.Page).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & typebarre & "_" & couleur & "_" & genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
-                                        
                                         n = n + 1
-                                        
                                     Else
-'à modifier
+                                        'à modifier
                                         Sheets(oStyle.Page).Cells(n, 1) = typebarre & "_" & genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2)
                                         Sheets(oStyle.Page).Cells(n, 9) = Sheets("FR").Cells(j, 18) 'taille
                                         Sheets(oStyle.Page).Cells(n, 11) = couleurnom
-'à modifier
+                                        'à modifier
                                         Sheets(oStyle.Page).Cells(n, 14) = codetee & codecouleur & Sheets("poches à décliner").Cells(I, 1) & "-" & codetaille ' changer le début seulement
                                         Sheets(oStyle.Page).Cells(n, 16) = "shopify"
                                         Sheets(oStyle.Page).Cells(n, 17) = 100000
@@ -259,26 +172,19 @@ Sub ToutesPochesToutesBases()
                                         
                                         Sheets(oStyle.Page).Cells(n, 22) = "'true"
                                         Sheets(oStyle.Page).Cells(n, 23) = "'true"
-                                        
-'---Enlever les poches non-convenable pour les enfants
-                                        
-'---Inventaire des bases---
-'Camisoles Homme
-                                        
-'Longsleeve Homme et Femme
-                                        
-                                        
-'***********************************************************************
+                                        '---Enlever les poches non-convenable pour les enfants
+                                        '---Inventaire des bases---
+                                        'Camisoles Homme
+                                            'Longsleeve Homme et Femme
+                                            '***********************************************************************
                                         If Left(Sheets(oStyle.Page).Cells(n, 1), 17) = "t-shirt_a_manches" Then
                                             If Sheets(oStyle.Page).Cells(n, 11) = "bleu-royal" Then
                                                 If Sheets(oStyle.Page).Cells(n, 9) = "S" Then
                                                     Sheets(oStyle.Page).Cells(n, 17) = 0
                                                 End If
                                             End If
-                                            
                                         End If
-'*************************************************************************
-                                        
+                                        '*************************************************************************
                                         If Left(Sheets(oStyle.Page).Cells(n, 1), 5) = "vneck" Then
                                             
                                             If Sheets(oStyle.Page).Cells(n, 11) = "blanc" Then
@@ -307,7 +213,7 @@ Sub ToutesPochesToutesBases()
                                             
                                         End If
                                         
-'*********************************************************************************
+                                        '*********************************************************************************
                                         If Left(Sheets(oStyle.Page).Cells(n, 1), 21) = "t-shirt_a_poche_ceris" Then
                                             If Sheets(oStyle.Page).Cells(n, 11) = "blanc" Then
                                                 If Sheets(oStyle.Page).Cells(n, 9) = "XXL" Or Sheets(oStyle.Page).Cells(n, 9) = "XS" Then
@@ -329,9 +235,7 @@ Sub ToutesPochesToutesBases()
                                             
                                         End If
                                         
-                                        
-                                        
-'************************************************************************************
+                                        '************************************************************************************
                                         
                                         If Left(Sheets(oStyle.Page).Cells(n, 1), 4) = "robe" Then
                                             If Sheets(oStyle.Page).Cells(n, 11) = "noir" Then
@@ -362,8 +266,8 @@ Sub ToutesPochesToutesBases()
                                             
                                             
                                         End If
-'*********************************************************************************
-'
+                                            '*********************************************************************************
+
                                         
                                         If Left(Sheets(oStyle.Page).Cells(n, 1), 21) = "t-shirt_a_poche_femme" Then
                                             If Sheets(oStyle.Page).Cells(n, 11) = "noir" Then
@@ -380,12 +284,7 @@ Sub ToutesPochesToutesBases()
                                             End If
                                             
                                         End If
-                                        
-'*********************************************************************************
-                                        
-                                        
-                                        
-'On ajoute les bases qui ont une image de dos disponible
+                                        'On ajoute les bases qui ont une image de dos disponible
                                         If Left(Sheets(oStyle.Page).Cells(n, 14), 3) = "312" Or Left(Sheets(oStyle.Page).Cells(n, 14), 3) = "212" Or Left(Sheets(oStyle.Page).Cells(n, 14), 3) = "203" Or Left(Sheets(oStyle.Page).Cells(n, 14), 3) = "217" Or Left(Sheets(oStyle.Page).Cells(n, 14), 3) = "301" Or Left(Sheets(oStyle.Page).Cells(n, 14), 3) = "210" Then
                                             If Sheets(oStyle.Page).Cells(n - 1, 26) = 1 Then
                                                 Sheets(oStyle.Page).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & typebarre & "_" & couleur & "_" & genderbarre & "-back.jpg"
@@ -409,7 +308,7 @@ Sub ToutesPochesToutesBases()
                                         If Sheets(oStyle.Page).Cells(n, 9) = "18m" Or Sheets(oStyle.Page).Cells(n, 9) = "2t" Or Sheets(oStyle.Page).Cells(n, 9) = "3t" Or Sheets(oStyle.Page).Cells(n, 9) = "4t" Or Sheets(oStyle.Page).Cells(n, 9) = "5t6t" Then Sheets(oStyle.Page).Cells(n, 33) = "tout-petits"
                                         
                                         Sheets(oStyle.Page).Cells(n, 34) = Left(Sheets(oStyle.Page).Cells(n, 14), 9)
-'à modifier
+                                        'à modifier
                                         Sheets(oStyle.Page).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & typebarre & "_" & couleur & "_" & genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
                                         
                                         n = n + 1
@@ -430,24 +329,19 @@ Sub ToutesPochesToutesBases()
                                             p = p + 1
                                         Wend
                                         
-                                        
-                                        
                                     End If
                                     
                                     Range(Sheets(oStyle.Page).Cells(1, 1), Sheets(oStyle.Page).Cells(1, 46)).Select
                                     Selection.Copy
                                     
-                                    
                                     ImportFile.Activate
                                     ImportFile.Sheets(1).Cells(1, 1).Select
                                     ActiveSheet.Paste
-                                    
                                     
                                     FichierImportProduit.Activate
                                     
                                     Range(Sheets(oStyle.Page).Cells(2, 1), Sheets(oStyle.Page).Cells(Sheets(oStyle.Page).Cells(1, 1).CurrentRegion.Rows.Count, 46)).Select
                                     Selection.Copy
-                                    
                                     
                                     ImportFile.Activate
                                     ImportFile.Sheets(1).Cells(ImportFile.Sheets(1).Cells(1, 1).CurrentRegion.Rows.Count + 1, 1).Select
