@@ -64,6 +64,7 @@ Sub ToutesPochesToutesBases()
                 PochesPourAdultes = Array("0006", "0008", "0093", "0141", "C271", "C264", "C282", "C268")
                 If IsInArray(Sheets("poches à décliner").Cells(I, 1), PochesPourAdultes) Then I = I + 1
             End If
+            'TODO=On pourrait déplacer les déclarations de k pour couleurs prioritaires et couleurs interdites à la racine du loop
             'INFO=k un compteur qu'on réutilise dans plusieurs boucles hermétiques
             For k = 3 To 20 'INFO=Nb de colonnes dans page "couleurs prioritaires"
                 'TODO=Étudier le fonctionnement du loop ici
