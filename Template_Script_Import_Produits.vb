@@ -18,6 +18,10 @@ Private Function IsInArray(valToBeFound As Variant, arr As Variant) As Boolean
 		IsInArray = False
 	End Function
 Sub ToutesPochesToutesBases()
+'Loop over les bases m
+    'Loop over les poches à décliner I
+        'Skip poches pour adulte
+        '
     Application.Calculation = xlCalculationManual
     Application.ScreenUpdating = False
     Set FichierImportProduit = ActiveWorkbook
@@ -29,7 +33,7 @@ Sub ToutesPochesToutesBases()
     Set ImportFile = ActiveWorkbook
     Dim couleuradecliner As New Collection
     Dim couleursinterdites As New Collection
-    For Each m In Array(101) 'INFO=3 premiers chiffres des VPN à décliner
+    For Each m In Array(210) 'INFO=3 premiers chiffres des VPN à décliner
         'TODO=Intégrer db.csv au fichier d'import ??
         'FUTUREUSE=FichierImportProduit.Activate
         'FUTUREUSE=Worksheets("db").Activate
@@ -54,22 +58,20 @@ Sub ToutesPochesToutesBases()
             oStyle.a = Cells(n, 16)
             oStyle.b = Cells(n, 17)
             oStyle.seo = Cells(n, 18)
-        FichierImportProduit.Sheets(oStyle.Page).Activatel
+        FichierImportProduit.Sheets(oStyle.Page).Activate
         Range(Sheets(oStyle.Page).Cells(2, 1), Sheets(oStyle.Page).Cells(10000, 1000)).Clear 'TODO=Rendre dynamique la taille du .Clear au lieu de 10k, 1k
         n = 2
-        For I = 1 To Sheets("poches à décliner").Cells(1, 1).CurrentRegion.Rows.Count
+        For I = 1 To Sheets("poches à décliner").Cells(1, 1).CurrentRegion.Rows.Count 'INFO=Itère sur chaque poche à décliner
             Set couleursadecliner = New Collection
             Set couleursinterdites = New Collection
             If m = 101 Or m = 501 Then 'INFO=Cette condition skip les lignes des poches qu'on ne décline pas pour enfants
                 PochesPourAdultes = Array("0006", "0008", "0093", "0141", "C271", "C264", "C282", "C268")
                 If IsInArray(Sheets("poches à décliner").Cells(I, 1), PochesPourAdultes) Then I = I + 1
             End If
-            'TODO=On pourrait déplacer les déclarations de k pour couleurs prioritaires et couleurs interdites à la racine du loop
-            'INFO=k un compteur qu'on réutilise dans plusieurs boucles hermétiques
-            For k = 3 To 20 'INFO=Nb de colonnes dans page "couleurs prioritaires"
-                'TODO=Étudier le fonctionnement du loop ici
-                If CStr(Sheets("couleurs prioritaires").Cells(1, k)) = CStr(oStyle.codetee) Then col = k
-                If CStr(Sheets("couleurs prioritaires").Cells(1, k)) = "Do not do" Then col_interdite = k
+            'TODO?=On pourrait déplacer les déclarations de k pour couleurs prioritaires et couleurs interdites à la racine du loop
+            'INFO=k un compteur de col qu'on réutilise dans plusieurs boucles hermétiques
+            For k = 3 To 20
+                If Sheets("couleurs prioritaires").Cells(1, k) = oStyle.codetee Then col = k
             Next k
             For k = 2 To Sheets("couleurs prioritaires").Cells(1, 1).CurrentRegion.Rows.Count
                 If CStr(Sheets("couleurs prioritaires").Cells(k, 1)) = CStr(Sheets("poches à décliner").Cells(I, 1)) Then
@@ -78,33 +80,34 @@ Sub ToutesPochesToutesBases()
             Exit For
                 End If
             Next k
-        k = col_interdite
-        While Sheets("couleurs prioritaires").Cells(lignepoche, k) <> ""
+            col_interdite = Application.Match("Do not do", Sheets("couleurs prioritaires").Range("A1:T1"), 0)
+            k = col_interdite
+            While Sheets("couleurs prioritaires").Cells(lignepoche, k) <> "" 'INFO=tant qu'il existe une couleur prioritaire
                         couleursinterdites.Add (Sheets("couleurs prioritaires").Cells(lignepoche, k))
                         k = k + 1
-        Wend
-        'MsgBox (couleursinterdites(1) & couleursinterdites(2))  
-        couleurstemp = oStyle.couleursoriginales
-        If IsInArray(couleurfav, couleurstemp) And couleurfav <> 3 Then
+            Wend
+            'MsgBox (couleursinterdites(1) & couleursinterdites(2))  
+            couleurstemp = oStyle.couleursoriginales
+            If IsInArray(couleurfav, couleurstemp) And couleurfav <> 3 Then
                         pos = Application.Match(couleurfav, couleurstemp, False) - 1
                         temp = couleurstemp(0)
                         couleurstemp(0) = couleurfav
                         couleurstemp(pos) = temp
-        End If
-        For Each k In couleurstemp
-                        couleursadecliner.Add k
-            For Each Z In couleursinterdites
-                If couleursadecliner(couleursadecliner.Count) = Z Then
-                                couleursadecliner.Remove (couleursadecliner.Count)
-                End If
-            Next Z
-        Next k
-        nbcouleur = couleursadecliner.Count                   
-        debut = 1
-        For Each p In couleursadecliner                                
-                        couleur = Sheets("FR").Cells(p, 9)
-                        couleurnom = Sheets("FR").Cells(p, 10)
-                        codecouleur = Sheets("FR").Cells(p, 8)
+            End If
+            For Each k In couleurstemp
+                couleursadecliner.Add k
+                For Each Z In couleursinterdites
+                    If couleursadecliner(couleursadecliner.Count) = Z Then
+                        couleursadecliner.Remove (couleursadecliner.Count)
+                    End If
+                Next Z
+            Next k
+            nbcouleur = couleursadecliner.Count                   
+            debut = 1
+            For Each p In couleursadecliner                                
+                couleur = Sheets("FR").Cells(p, 9)
+                couleurnom = Sheets("FR").Cells(p, 10)
+                codecouleur = Sheets("FR").Cells(p, 8)
             For j = oStyle.a To oStyle.b 'tailles à décliner
                 codetaille = Sheets("FR").Cells(j, 19)
                 If j = oStyle.a And debut = 1 Then
@@ -119,12 +122,12 @@ Sub ToutesPochesToutesBases()
                     If oStyle.gender = "enfant" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & "-Enfant"
                     If oStyle.gender = "bébé" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & "-Bebe"
                     If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", B2S19"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Nouveautés FW19"
+                    'If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Nouveautés FW19"
                     If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Nouveauté"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "homme" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Homme - Nouvelles poches FW19"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "femme" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Femme - Nouvelles poches FW19"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Enfant - Nouvelles poches FW19"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "bébé" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Bébé - Nouvelles poches FW19"
+                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "homme" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Homme - Nouvelles Poches"
+                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "femme" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Femme - Nouvelles Poches"
+                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Enfant - NoNouvelles Poches"
+                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "bébé" Then Sheets(oStyle.Page).Cells(n, 6) = Sheets(oStyle.Page).Cells(n, 6) & ", collection:Bébé - Nouvelles Poches"
                     Sheets(oStyle.Page).Cells(n, 7) = "'true"
                     Sheets(oStyle.Page).Cells(n, 8) = "Size"
                     Sheets(oStyle.Page).Cells(n, 9) = Sheets("FR").Cells(j, 18) 'taille
@@ -192,8 +195,8 @@ Sub ToutesPochesToutesBases()
                         Sheets(oStyle.Page).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.typebarre & "_" & couleur & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
                         n = n + 1
                     End If
-                Next j
-                debut = 0
+            Next j
+            debut = 0
             Next p
         Next I
         If m = 6 Or m = 7 Then
