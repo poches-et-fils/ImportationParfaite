@@ -51,7 +51,7 @@ Sub ToutesPochesToutesBases()
             oStyle.prix = Cells(n, 8)
             oStyle.VPN123 = Cells(n, 9)
             oStyle.Style = Cells(n, 10)
-            oStyle.style_camel_case = Cells(n, 11)
+            oStyle.style_snake_case = Cells(n, 11)
             oStyle.couleurdebut = Cells(n, 12)
             oStyle.couleurfin = Cells(n, 13)
             oStyle.couleursoriginales = Split(Cells(n, 14), ",")
@@ -107,12 +107,12 @@ Sub ToutesPochesToutesBases()
             debut = 1
             For Each p In couleursadecliner                                
                 couleur_snake_case = Sheets("FR").Cells(p, 9)
-                couleur-kebab-case = Sheets("FR").Cells(p, 10)
+                couleur_kebab_case = Sheets("FR").Cells(p, 10)
                 codecouleur = Sheets("FR").Cells(p, 8)
             For j = oStyle.a To oStyle.b 'tailles à décliner
                 codetaille = Sheets("FR").Cells(j, 19)
                 If j = oStyle.a And debut = 1 Then
-                    oVariant.Handle = oStyle.style_camel_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2)
+                    oVariant.Handle = oStyle.style_snake_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2)
                     oVariant.Title = Sheets("poches à décliner").Cells(I, 3)
                     oVariant.Body_HTML = Sheets("poches à décliner").Cells(I, 4)
                     oVariant.Vendor = Replace(Sheets("poches à décliner").Cells(I, 5), "'", "_")
@@ -138,7 +138,7 @@ Sub ToutesPochesToutesBases()
                     oVariant.Option1_Name = "Size"
                     oVariant.Option1_Value = Sheets("FR").Cells(j, 18)
                     oVariant.Option2_Name = "Color"
-                    oVariant.Option2_Value = couleur-kebab-case
+                    oVariant.Option2_Value = couleur_kebab_case
                     oVariant.Variant_SKU = oStyle.VPN123 & codecouleur & Sheets("poches à décliner").Cells(I, 1) & "-" & codetaille ' changer le début seulement
                     oVariant.Variant_Inventory_Tracker = "shopify"
                     oVariant.Variant_Inventory_Qty = 10000
@@ -147,7 +147,7 @@ Sub ToutesPochesToutesBases()
                     oVariant.Variant_Requires_Shipping = "'true"
                     oVariant.Variant_Taxable = "'true"
                     oVariant.Image_Src = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" _
-                        & oStyle.style_camel_case & "_" _
+                        & oStyle.style_snake_case & "_" _
                         & couleur_snake_case & "_" _
                         & oStyle.GenderASCII & "_" _
                         & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
@@ -178,7 +178,7 @@ Sub ToutesPochesToutesBases()
 
                     Sheets(oStyle.SheetName).Cells(n, 27) = oStyle.Style & " pour " & oStyle.gender & " avec poche " & Sheets("poches à décliner").Cells(I, 3) & " à motif de " & Sheets("poches à décliner").Cells(I, 7)
                     Sheets(oStyle.SheetName).Cells(n, 28) = "'false"
-                    Sheets(oStyle.SheetName).Cells(n, 29) = Sheets("poches à décliner").Cells(I, 3) & " - " & oStyle.Style & " " & couleur-kebab-case & " " & oStyle.gender & " | Poches & Fils"
+                    Sheets(oStyle.SheetName).Cells(n, 29) = Sheets("poches à décliner").Cells(I, 3) & " - " & oStyle.Style & " " & couleur_kebab_case & " " & oStyle.gender & " | Poches & Fils"
                     Sheets(oStyle.SheetName).Cells(n, 30) = oStyle.seo
                     Sheets(oStyle.SheetName).Cells(n, 31) = "=VLOOKUP(LEFT(RC[3],3),'Google merchant FR'!R2C1:R50C2,2,0)"
                     Sheets(oStyle.SheetName).Cells(n, 32) = oStyle.googlegender
@@ -187,13 +187,13 @@ Sub ToutesPochesToutesBases()
                     Sheets(oStyle.SheetName).Cells(n, 35) = Sheets(oStyle.SheetName).Cells(n, 5)
                     Sheets(oStyle.SheetName).Cells(n, 37) = "neuf"
                     'à modifier
-                    Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & couleur_snake_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
+                    Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_snake_case & "_" & couleur_snake_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
                     n = n + 1
                 Else
                     'à modifier
-                    Sheets(oStyle.SheetName).Cells(n, 1) = oStyle.style_camel_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2)
+                    Sheets(oStyle.SheetName).Cells(n, 1) = oStyle.style_snake_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2)
                     Sheets(oStyle.SheetName).Cells(n, 9) = Sheets("FR").Cells(j, 18) 'taille
-                    Sheets(oStyle.SheetName).Cells(n, 11) = couleur-kebab-case
+                    Sheets(oStyle.SheetName).Cells(n, 11) = couleur_kebab_case
                     'à modifier
                     Sheets(oStyle.SheetName).Cells(n, 14) = oStyle.VPN123 & codecouleur & Sheets("poches à décliner").Cells(I, 1) & "-" & codetaille ' changer le début seulement
                     Sheets(oStyle.SheetName).Cells(n, 16) = "shopify"
@@ -208,12 +208,12 @@ Sub ToutesPochesToutesBases()
                     'On ajoute les bases qui ont une image de dos disponible
                     If Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "312" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "212" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "203" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "217" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "301" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "210" Then
                         If Sheets(oStyle.SheetName).Cells(n - 1, 26) = 1 Then
-                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & couleur_snake_case & "_" & oStyle.GenderASCII & "-back.jpg"
+                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_snake_case & "_" & couleur_snake_case & "_" & oStyle.GenderASCII & "-back.jpg"
                             Sheets(oStyle.SheetName).Cells(n, 26) = 2
                             Sheets(oStyle.SheetName).Cells(n, 27) = "color:" & Sheets("FR").Cells(p, 10)
                         ElseIf Sheets(oStyle.SheetName).Cells(n - 1, 26) > 1 And Sheets(oStyle.SheetName).Cells(n - 1, 26) <= nbcouleur Then
                             Sheets(oStyle.SheetName).Cells(n, 26) = Sheets(oStyle.SheetName).Cells(n - 1, 26) + 1
-                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & Sheets("FR").Cells(couleursadecliner(Sheets(oStyle.SheetName).Cells(n - 1, 26)), 9) & "_" & oStyle.GenderASCII & "-back.jpg"
+                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_snake_case & "_" & Sheets("FR").Cells(couleursadecliner(Sheets(oStyle.SheetName).Cells(n - 1, 26)), 9) & "_" & oStyle.GenderASCII & "-back.jpg"
                             Sheets(oStyle.SheetName).Cells(n, 27) = "color:" & Sheets("FR").Cells(couleursadecliner(Sheets(oStyle.SheetName).Cells(n - 1, 26)), 10)
                         Else
                         End If
@@ -225,7 +225,7 @@ Sub ToutesPochesToutesBases()
                     If Sheets(oStyle.SheetName).Cells(n, 9) = "18m" Or Sheets(oStyle.SheetName).Cells(n, 9) = "2t" Or Sheets(oStyle.SheetName).Cells(n, 9) = "3t" Or Sheets(oStyle.SheetName).Cells(n, 9) = "4t" Or Sheets(oStyle.SheetName).Cells(n, 9) = "5t6t" Then Sheets(oStyle.SheetName).Cells(n, 33) = "tout-petits"
                         Sheets(oStyle.SheetName).Cells(n, 34) = Left(Sheets(oStyle.SheetName).Cells(n, 14), 9)
                                         'à modifier
-                        Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & couleur_snake_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
+                        Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_snake_case & "_" & couleur_snake_case & "_" & oStyle.GenderASCII & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
                         n = n + 1
                     End If
             Next j

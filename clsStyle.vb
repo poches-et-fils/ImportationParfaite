@@ -9,7 +9,7 @@ public googlegender as String
 public prix as Currency
 public VPN123 as Integer
 public Style as String
-public style_camel_case as String
+public style_snake_case as String
 public couleurdebut as Byte
 public couleurfin as Byte
 public couleursoriginales as Variant
