@@ -1,6 +1,6 @@
 'Module Classe: clsStyle
 Public Index as Integer
-Public Page as String
+Public SheetName as String
 Public gender as String
 Public genderbarre as String
 Public tagsGenre as String
@@ -9,7 +9,7 @@ public googlegender as String
 public prix as Currency
 public codetee as Integer
 public typeprod as String
-public typebarre as String
+public Style_camel_case as String
 public couleurdebut as Byte
 public couleurfin as Byte
 public couleursoriginales as Variant
