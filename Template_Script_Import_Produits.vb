@@ -40,6 +40,7 @@ Sub ToutesPochesToutesBases()
         Dim db As Workbook
         Set db = Workbooks.Open(Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\008 Opérations\09 macros\ImportationParfaite\db.csv")
         Dim oStyle As New clsStyle 'INFO=oStyle est un objet custom qui sert à contenir tous les attributs de chaque produit et variante
+        Dim oVariant as New clsVariant 'INFO=Doit-on déclarer cet objet à cet endroit ou aller plus loin dans le nesting ?
         n = Application.WorksheetFunction.Match(m, Range("A1:A20"), 0)
             oStyle.SheetName = Cells(n, 2)
             oStyle.gender = Cells(n, 3)
@@ -49,8 +50,8 @@ Sub ToutesPochesToutesBases()
             oStyle.googlegender = Cells(n, 7)
             oStyle.prix = Cells(n, 8)
             oStyle.codetee = Cells(n, 9)
-            oStyle.typeprod = Cells(n, 10)
-            oStyle.Style_camel_case = Cells(n, 11)
+            oStyle.Style = Cells(n, 10)
+            oStyle.style_camel_case = Cells(n, 11)
             oStyle.couleurdebut = Cells(n, 12)
             oStyle.couleurfin = Cells(n, 13)
             oStyle.couleursoriginales = Split(Cells(n, 14), ",")
@@ -111,28 +112,40 @@ Sub ToutesPochesToutesBases()
             For j = oStyle.a To oStyle.b 'tailles à décliner
                 codetaille = Sheets("FR").Cells(j, 19)
                 If j = oStyle.a And debut = 1 Then
-                
+                    oVariant.Handle = oStyle.style_camel_case & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2)
+                    oVariant.Title = Sheets("poches à décliner").Cells(I, 3)
+                    oVariant.Body_HTML = Sheets("poches à décliner").Cells(I, 4)
+                    oVariant.Vendor = Replace(Sheets("poches à décliner").Cells(I, 5), "'", "_")
+                    oVariant.Type = oStyle.Style
+                        x ="gender:" _
+                            & oStyle.tagsGenre _
+                            & oStyle.tagsCollections _
+                            & ", collection:" _
+                            & Sheets("poches à décliner").Cells(I, 6) _
+                            & ", collection:" _
+                            & Sheets("poches à décliner").Cells(I, 6)
+                        If oStyle.gender = "homme" Then x = x & "-Homme"
+                        If oStyle.gender = "femme" Then x = x & "-Femme"
+                        If oStyle.gender = "enfant" Then x = x & "-Enfant"
+                        If oStyle.gender = "bébé" Then x = x & "-Bebe"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", B2S19"
+                        'If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Nouveautés FW19"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Nouveauté"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "homme" Then x = x & ", collection:Homme - Nouvelles Poches"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "femme" Then x = x & ", collection:Femme - Nouvelles Poches"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then x = x & ", collection:Enfant - NoNouvelles Poches"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "bébé" Then x = x & ", collection:Bébé - Nouvelles Poches"
+                    oVariant.Tags = x
 
 
+                    Sheets(oStyle.SheetName).Cells(n, 1) = oVariant.Handle
+                    Sheets(oStyle.SheetName).Cells(n, 2) = oVariant.Title
+                    Sheets(oStyle.SheetName).Cells(n, 3) = oVariant.Body_HTML
+                    Sheets(oStyle.SheetName).Cells(n, 4) = oVariant.Vendor
+                    Sheets(oStyle.SheetName).Cells(n, 5) = oVariant.Type ' Style de produit
+                    Sheets(oStyle.SheetName).Cells(n, 6) = oVariant.Tags
 
 
-                    Sheets(oStyle.SheetName).Cells(n, 1) = oStyle.Style_camel_case & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2)
-                    Sheets(oStyle.SheetName).Cells(n, 2) = Sheets("poches à décliner").Cells(I, 3)
-                    Sheets(oStyle.SheetName).Cells(n, 3) = Sheets("poches à décliner").Cells(I, 4)
-                    Sheets(oStyle.SheetName).Cells(n, 4) = Replace(Sheets("poches à décliner").Cells(I, 5), "'", "_")
-                    Sheets(oStyle.SheetName).Cells(n, 5) = oStyle.typeprod ' type de produit
-                    Sheets(oStyle.SheetName).Cells(n, 6) = "gender:" & oStyle.tagsGenre & oStyle.tagsCollections & ", collection:" & Sheets("poches à décliner").Cells(I, 6) & ", collection:" & Sheets("poches à décliner").Cells(I, 6)
-                    If oStyle.gender = "homme" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & "-Homme"
-                    If oStyle.gender = "femme" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & "-Femme"
-                    If oStyle.gender = "enfant" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & "-Enfant"
-                    If oStyle.gender = "bébé" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & "-Bebe"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", B2S19"
-                    'If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Nouveautés FW19"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Nouveauté"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "homme" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Homme - Nouvelles Poches"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "femme" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Femme - Nouvelles Poches"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Enfant - NoNouvelles Poches"
-                    If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "bébé" Then Sheets(oStyle.SheetName).Cells(n, 6) = Sheets(oStyle.SheetName).Cells(n, 6) & ", collection:Bébé - Nouvelles Poches"
                     Sheets(oStyle.SheetName).Cells(n, 7) = "'true"
                     Sheets(oStyle.SheetName).Cells(n, 8) = "Size"
                     Sheets(oStyle.SheetName).Cells(n, 9) = Sheets("FR").Cells(j, 18) 'taille
@@ -146,11 +159,11 @@ Sub ToutesPochesToutesBases()
                     Sheets(oStyle.SheetName).Cells(n, 20) = oStyle.prix
                     Sheets(oStyle.SheetName).Cells(n, 22) = "'true"
                     Sheets(oStyle.SheetName).Cells(n, 23) = "'true"
-                    Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.Style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
+                    Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
                     Sheets(oStyle.SheetName).Cells(n, 26) = 1
-                    Sheets(oStyle.SheetName).Cells(n, 27) = oStyle.typeprod & " pour " & oStyle.gender & " avec poche " & Sheets("poches à décliner").Cells(I, 3) & " à motif de " & Sheets("poches à décliner").Cells(I, 7)
+                    Sheets(oStyle.SheetName).Cells(n, 27) = oStyle.Style & " pour " & oStyle.gender & " avec poche " & Sheets("poches à décliner").Cells(I, 3) & " à motif de " & Sheets("poches à décliner").Cells(I, 7)
                     Sheets(oStyle.SheetName).Cells(n, 28) = "'false"
-                    Sheets(oStyle.SheetName).Cells(n, 29) = Sheets("poches à décliner").Cells(I, 3) & " - " & oStyle.typeprod & " " & couleurnom & " " & oStyle.gender & " | Poches & Fils"
+                    Sheets(oStyle.SheetName).Cells(n, 29) = Sheets("poches à décliner").Cells(I, 3) & " - " & oStyle.Style & " " & couleurnom & " " & oStyle.gender & " | Poches & Fils"
                     Sheets(oStyle.SheetName).Cells(n, 30) = oStyle.seo
                     Sheets(oStyle.SheetName).Cells(n, 31) = "=VLOOKUP(LEFT(RC[3],3),'Google merchant FR'!R2C1:R50C2,2,0)"
                     Sheets(oStyle.SheetName).Cells(n, 32) = oStyle.googlegender
@@ -159,11 +172,11 @@ Sub ToutesPochesToutesBases()
                     Sheets(oStyle.SheetName).Cells(n, 35) = Sheets(oStyle.SheetName).Cells(n, 5)
                     Sheets(oStyle.SheetName).Cells(n, 37) = "neuf"
                     'à modifier
-                    Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.Style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
+                    Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
                     n = n + 1
                 Else
                     'à modifier
-                    Sheets(oStyle.SheetName).Cells(n, 1) = oStyle.Style_camel_case & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2)
+                    Sheets(oStyle.SheetName).Cells(n, 1) = oStyle.style_camel_case & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2)
                     Sheets(oStyle.SheetName).Cells(n, 9) = Sheets("FR").Cells(j, 18) 'taille
                     Sheets(oStyle.SheetName).Cells(n, 11) = couleurnom
                     'à modifier
@@ -180,12 +193,12 @@ Sub ToutesPochesToutesBases()
                     'On ajoute les bases qui ont une image de dos disponible
                     If Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "312" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "212" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "203" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "217" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "301" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "210" Then
                         If Sheets(oStyle.SheetName).Cells(n - 1, 26) = 1 Then
-                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.Style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "-back.jpg"
+                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "-back.jpg"
                             Sheets(oStyle.SheetName).Cells(n, 26) = 2
                             Sheets(oStyle.SheetName).Cells(n, 27) = "color:" & Sheets("FR").Cells(p, 10)
                         ElseIf Sheets(oStyle.SheetName).Cells(n - 1, 26) > 1 And Sheets(oStyle.SheetName).Cells(n - 1, 26) <= nbcouleur Then
                             Sheets(oStyle.SheetName).Cells(n, 26) = Sheets(oStyle.SheetName).Cells(n - 1, 26) + 1
-                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.Style_camel_case & "_" & Sheets("FR").Cells(couleursadecliner(Sheets(oStyle.SheetName).Cells(n - 1, 26)), 9) & "_" & oStyle.genderbarre & "-back.jpg"
+                            Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & Sheets("FR").Cells(couleursadecliner(Sheets(oStyle.SheetName).Cells(n - 1, 26)), 9) & "_" & oStyle.genderbarre & "-back.jpg"
                             Sheets(oStyle.SheetName).Cells(n, 27) = "color:" & Sheets("FR").Cells(couleursadecliner(Sheets(oStyle.SheetName).Cells(n - 1, 26)), 10)
                         Else
                         End If
@@ -197,7 +210,7 @@ Sub ToutesPochesToutesBases()
                     If Sheets(oStyle.SheetName).Cells(n, 9) = "18m" Or Sheets(oStyle.SheetName).Cells(n, 9) = "2t" Or Sheets(oStyle.SheetName).Cells(n, 9) = "3t" Or Sheets(oStyle.SheetName).Cells(n, 9) = "4t" Or Sheets(oStyle.SheetName).Cells(n, 9) = "5t6t" Then Sheets(oStyle.SheetName).Cells(n, 33) = "tout-petits"
                         Sheets(oStyle.SheetName).Cells(n, 34) = Left(Sheets(oStyle.SheetName).Cells(n, 14), 9)
                                         'à modifier
-                        Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.Style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
+                        Sheets(oStyle.SheetName).Cells(n, 44) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_camel_case & "_" & couleur & "_" & oStyle.genderbarre & "_" & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
                         n = n + 1
                     End If
             Next j
