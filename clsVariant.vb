@@ -1,0 +1,2 @@
+'Module Classe: clsStyle
+Public 
