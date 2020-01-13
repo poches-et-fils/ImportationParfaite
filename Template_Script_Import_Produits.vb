@@ -31,9 +31,9 @@ Sub ToutesPochesToutesBases()
     ActiveWorkbook.SaveAs Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\004 Web\01Outils\01ImportationProduit\" & NomFichier
     Dim ImportFile As Workbook
     Set ImportFile = ActiveWorkbook
-    Dim couleuradecliner As New Collection
+    Dim couleursadecliner As New Collection
     Dim couleursinterdites As New Collection
-    For Each m In Array(210) 'INFO=3 premiers chiffres des VPN à décliner
+    For Each m In Array(101,203,210,501) 'INFO=3 premiers chiffres des VPN à décliner
         'TODO=Intégrer db.csv au fichier d'import ??
         'FUTUREUSE=FichierImportProduit.Activate
         'FUTUREUSE=Worksheets("db").Activate
