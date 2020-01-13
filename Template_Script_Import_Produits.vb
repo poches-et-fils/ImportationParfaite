@@ -76,7 +76,7 @@ Sub ToutesPochesToutesBases()
             Next k
             For k = 2 To Sheets("couleurs prioritaires").Cells(1, 1).CurrentRegion.Rows.Count
                 If CStr(Sheets("couleurs prioritaires").Cells(k, 1)) = CStr(Sheets("poches à décliner").Cells(I, 1)) Then
-                    couleurfav = Sheets("couleurs prioritaires").Cells(k, col)
+                    couleurfav = CStr(Sheets("couleurs prioritaires").Cells(k, col))
                     lignepoche = k
             Exit For
                 End If
@@ -84,16 +84,16 @@ Sub ToutesPochesToutesBases()
             col_interdite = Application.Match("Do not do", Sheets("couleurs prioritaires").Range("A1:T1"), 0)
             k = col_interdite
             While Sheets("couleurs prioritaires").Cells(lignepoche, k) <> "" 'INFO=tant qu'il existe une couleur prioritaire
-                        couleursinterdites.Add (Sheets("couleurs prioritaires").Cells(lignepoche, k))
-                        k = k + 1
+                couleursinterdites.Add CStr((Sheets("couleurs prioritaires").Cells(lignepoche, k)))
+                k = k + 1
             Wend
             'MsgBox (couleursinterdites(1) & couleursinterdites(2))  
             couleurstemp = oStyle.couleursoriginales
             If IsInArray(couleurfav, couleurstemp) And couleurfav <> 3 Then
-                        pos = Application.Match(couleurfav, couleurstemp, False) - 1
-                        temp = couleurstemp(0)
-                        couleurstemp(0) = couleurfav
-                        couleurstemp(pos) = temp
+                pos = Application.Match(couleurfav, couleurstemp, False) - 1 'SEARCH=-1 car uno-indexé?
+                temp = couleurstemp(0)
+                couleurstemp(0) = couleurfav 'SEARCH=0 car zéro-indexé?
+                couleurstemp(pos) = temp 
             End If
             For Each k In couleurstemp
                 couleursadecliner.Add k
