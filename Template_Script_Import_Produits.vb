@@ -131,7 +131,7 @@ Sub ToutesPochesToutesBases()
                         If Sheets("poches à décliner").Cells(I, 8) = "new" Then x = x & ", collection:Nouveauté"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "homme" Then x = x & ", collection:Homme - Nouvelles Poches"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "femme" Then x = x & ", collection:Femme - Nouvelles Poches"
-                        If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then x = x & ", collection:Enfant - NoNouvelles Poches"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then x = x & ", collection:Enfant - Nouvelles Poches"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "bébé" Then x = x & ", collection:Bébé - Nouvelles Poches"
                     oVariant.Tags = x
                     oVariant.Published = "'true"
