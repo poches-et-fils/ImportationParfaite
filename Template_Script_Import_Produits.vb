@@ -152,7 +152,6 @@ Sub ToutesPochesToutesBases()
                         & oStyle.GenderASCII & "_" _
                         & Sheets("poches à décliner").Cells(I, 2) & ".jpg"
 
-
                     Sheets(oStyle.SheetName).Cells(n, 1) = oVariant.Handle
                     Sheets(oStyle.SheetName).Cells(n, 2) = oVariant.Title
                     Sheets(oStyle.SheetName).Cells(n, 3) = oVariant.Body_HTML
@@ -253,7 +252,34 @@ Sub ToutesPochesToutesBases()
         ImportFile.Sheets(1).Cells(ImportFile.Sheets(1).Cells(1, 1).CurrentRegion.Rows.Count + 1, 1).Select
         ActiveSheet.Paste                            
     Next m
-    db.Close                             
+    db.Close SaveChanges:=False
+    'On ouvre l'inventaire
+    Dim Inventaire As Workbook
+    Set Inventaire = Workbooks.Open(Filename:="C:\Users\" & NomUser & _
+    "\pochesetfils.com\PUBLIC - Documents\008 Opérations\02GESTION DE COMMANDES\Inventaire P&F.xlsm")
+
+    'Déclaration des variables
+    Dim Sku as String, LeftSku as String, RightSku as String, GenericSku as String
+
+    'Trouve la colonne "AVAILABLE TO SELL" dans Inventaire
+    Inventaire.Worksheets("Produits à poches").Activate
+    ColAvailToSell = Application.WorksheetFunction.Match("AVAILABLE TO SELL", Range("A4:Z4"), 0)
+
+    'Pour chaque chandail à poche dans ImportFile, mettre à -100 si la base est en rupture d'inventaire
+    For ligne = 2 To ImportFile.Worksheets(1).Cells(1, 1).CurrentRegion.Rows.Count
+        Sku = ImportFile.Worksheets(1).Cells(ligne, 14)
+        LeftSku = Left(Sku,5)
+        If Left(LeftSku, 3) = "212" Then LeftSku = Replace(LeftSku, "212", "312") 'Convertir VPN 212 à VPN 312
+        RightSku = Right(Sku,2)
+        GenericSku = LeftSku & "XXXX-" & RightSku
+        qt = Application.VLookup( _
+            GenericSku, Inventaire.Worksheets("Produits à poches").Range("A5:Z500"), ColAvailToSell, False)
+        If qt <= 0 Then ImportFile.Worksheets(1).Cells(ligne, 17) = -100
+    Next ligne
+
+    'On ferme l'inventaire
+    Inventaire.Close SaveChanges:=False
+
     Application.ScreenUpdating = True
     Application.Calculation = xlCalculationAutomatic
 End Sub
