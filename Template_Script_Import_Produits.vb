@@ -17,6 +17,7 @@ Private Function IsInArray(valToBeFound As Variant, arr As Variant) As Boolean
 		On Error GoTo 0
 		IsInArray = False
 	End Function
+
 Sub ToutesPochesToutesBases()
 'Loop over les bases m
     'Loop over les poches à décliner I
@@ -173,9 +174,14 @@ Sub ToutesPochesToutesBases()
                     Sheets(oStyle.SheetName).Cells(n, 23) = oVariant.Variant_Taxable
                     Sheets(oStyle.SheetName).Cells(n, 25) = oVariant.Image_Src
                     Sheets(oStyle.SheetName).Cells(n, 26) = 1
+                    Sheets(oStyle.SheetName).Cells(n, 27) = oStyle.Style & " pour "_
+                                                            & oStyle.gender & " avec poche "_
+                                                            & Sheets("poches à décliner").Cells(I, 3)_
+                                                            & " à motif de "_
+                                                            & Sheets("poches à décliner").Cells(I, 7)
+
                     'TODO=Continuer le pont entre les deux sections (reste 11 variables)
 
-                    Sheets(oStyle.SheetName).Cells(n, 27) = oStyle.Style & " pour " & oStyle.gender & " avec poche " & Sheets("poches à décliner").Cells(I, 3) & " à motif de " & Sheets("poches à décliner").Cells(I, 7)
                     Sheets(oStyle.SheetName).Cells(n, 28) = "'false"
                     Sheets(oStyle.SheetName).Cells(n, 29) = Sheets("poches à décliner").Cells(I, 3) & " - " & oStyle.Style & " " & couleur_kebab_case & " " & oStyle.gender & " | Poches & Fils"
                     Sheets(oStyle.SheetName).Cells(n, 30) = oStyle.seo
