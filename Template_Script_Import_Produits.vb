@@ -4,19 +4,19 @@ Private Function IsInArray(valToBeFound As Variant, arr As Variant) As Boolean
     'DESCRIPTION: Function to check if a value is in an array of values
     'INPUT: Pass the function a value to search for and an array of values of any data type.
     'OUTPUT: True if is in array, false otherwise
-	Dim element     As Variant
-	On Error GoTo IsInArrayError: 'array is empty
-	For Each element In arr
-		If element = valToBeFound Then
-			IsInArray = True
-			Exit Function
-		End If
-		Next element
-		Exit Function
-		IsInArrayError:
-		On Error GoTo 0
-		IsInArray = False
-	End Function
+    Dim element     As Variant
+    On Error GoTo IsInArrayError: 'array is empty
+    For Each element In arr
+        If element = valToBeFound Then
+            IsInArray = True
+            Exit Function
+        End If
+        Next element
+        Exit Function
+IsInArrayError:
+        On Error GoTo 0
+        IsInArray = False
+    End Function
 
 Sub ToutesPochesToutesBases()
 'Loop over les bases m
@@ -34,14 +34,14 @@ Sub ToutesPochesToutesBases()
     Set ImportFile = ActiveWorkbook
     Dim couleursadecliner As New Collection
     Dim couleursinterdites As New Collection
-    For Each m In Array(101,203,210,501) 'INFO=3 premiers chiffres des VPN à décliner
+    For Each m In Array(217) 'INFO=3 premiers chiffres des VPN à décliner 101, 203, 210, 212, 217, 301, 312, 501
         'TODO=Intégrer db.csv au fichier d'import ??
         'FUTUREUSE=FichierImportProduit.Activate
         'FUTUREUSE=Worksheets("db").Activate
         Dim db As Workbook
         Set db = Workbooks.Open(Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\008 Opérations\09 macros\ImportationParfaite\db.csv")
         Dim oStyle As New clsStyle 'INFO=oStyle est un objet custom qui sert à contenir tous les attributs de chaque produit et variante
-        Dim oVariant as New clsVariant 'INFO=Doit-on déclarer cet objet à cet endroit ou aller plus loin dans le nesting ?
+        Dim oVariant As New clsVariant 'INFO=Doit-on déclarer cet objet à cet endroit ou aller plus loin dans le nesting ?
         n = Application.WorksheetFunction.Match(m, Range("A1:A20"), 0)
             oStyle.SheetName = Cells(n, 2)
             oStyle.gender = Cells(n, 3)
@@ -88,13 +88,13 @@ Sub ToutesPochesToutesBases()
                 couleursinterdites.Add CStr((Sheets("couleurs prioritaires").Cells(lignepoche, k)))
                 k = k + 1
             Wend
-            'MsgBox (couleursinterdites(1) & couleursinterdites(2))  
+            'MsgBox (couleursinterdites(1) & couleursinterdites(2))
             couleurstemp = oStyle.couleursoriginales
             If IsInArray(couleurfav, couleurstemp) And couleurfav <> 3 Then
                 pos = Application.Match(couleurfav, couleurstemp, False) - 1 'SEARCH=-1 car uno-indexé?
                 temp = couleurstemp(0)
                 couleurstemp(0) = couleurfav 'SEARCH=0 car zéro-indexé?
-                couleurstemp(pos) = temp 
+                couleurstemp(pos) = temp
             End If
             For Each k In couleurstemp
                 couleursadecliner.Add k
@@ -104,9 +104,9 @@ Sub ToutesPochesToutesBases()
                     End If
                 Next Z
             Next k
-            nbcouleur = couleursadecliner.Count                   
+            nbcouleur = couleursadecliner.Count
             debut = 1
-            For Each p In couleursadecliner                                
+            For Each p In couleursadecliner
                 couleur_snake_case = Sheets("FR").Cells(p, 9)
                 couleur_kebab_case = Sheets("FR").Cells(p, 10)
                 codecouleur = Sheets("FR").Cells(p, 8)
@@ -117,7 +117,7 @@ Sub ToutesPochesToutesBases()
                     oVariant.Title = Sheets("poches à décliner").Cells(I, 3)
                     oVariant.Body_HTML = Sheets("poches à décliner").Cells(I, 4)
                     oVariant.Vendor = Replace(Sheets("poches à décliner").Cells(I, 5), "'", "_")
-                    x ="gender:" _
+                    x = "gender:" _
                         & oStyle.tagsGenre _
                         & oStyle.tagsCollections _
                         & ", collection:" _
@@ -174,10 +174,10 @@ Sub ToutesPochesToutesBases()
                     Sheets(oStyle.SheetName).Cells(n, 23) = oVariant.Variant_Taxable
                     Sheets(oStyle.SheetName).Cells(n, 25) = oVariant.Image_Src
                     Sheets(oStyle.SheetName).Cells(n, 26) = 1
-                    Sheets(oStyle.SheetName).Cells(n, 27) = oStyle.Style & " pour "_
-                                                            & oStyle.gender & " avec poche "_
-                                                            & Sheets("poches à décliner").Cells(I, 3)_
-                                                            & " à motif de "_
+                    Sheets(oStyle.SheetName).Cells(n, 27) = oStyle.Style & " pour " _
+                                                            & oStyle.gender & " avec poche " _
+                                                            & Sheets("poches à décliner").Cells(I, 3) _
+                                                            & " à motif de " _
                                                             & Sheets("poches à décliner").Cells(I, 7)
 
                     'TODO=Continuer le pont entre les deux sections (reste 11 variables)
@@ -222,7 +222,7 @@ Sub ToutesPochesToutesBases()
                             Sheets(oStyle.SheetName).Cells(n, 27) = "color:" & Sheets("FR").Cells(couleursadecliner(Sheets(oStyle.SheetName).Cells(n - 1, 26)), 10)
                         Else
                         End If
-                    End If            
+                    End If
                     Sheets(oStyle.SheetName).Cells(n, 30) = oStyle.seo
                     Sheets(oStyle.SheetName).Cells(n, 31) = "=VLOOKUP(LEFT(RC[3],3),'Google merchant FR'!R2C1:R50C2,2,0)"
                     Sheets(oStyle.SheetName).Cells(n, 32) = oStyle.googlegender
@@ -250,13 +250,13 @@ Sub ToutesPochesToutesBases()
         Selection.Copy
         ImportFile.Activate
         ImportFile.Sheets(1).Cells(1, 1).Select
-        ActiveSheet.Paste 
+        ActiveSheet.Paste
         FichierImportProduit.Activate
         Range(Sheets(oStyle.SheetName).Cells(2, 1), Sheets(oStyle.SheetName).Cells(Sheets(oStyle.SheetName).Cells(1, 1).CurrentRegion.Rows.Count, 46)).Select
         Selection.Copy
         ImportFile.Activate
         ImportFile.Sheets(1).Cells(ImportFile.Sheets(1).Cells(1, 1).CurrentRegion.Rows.Count + 1, 1).Select
-        ActiveSheet.Paste                            
+        ActiveSheet.Paste
     Next m
     db.Close SaveChanges:=False
     'On ouvre l'inventaire
@@ -265,7 +265,7 @@ Sub ToutesPochesToutesBases()
     "\pochesetfils.com\PUBLIC - Documents\008 Opérations\02GESTION DE COMMANDES\Inventaire P&F.xlsm")
 
     'Déclaration des variables
-    Dim Sku as String, LeftSku as String, RightSku as String, GenericSku as String
+    Dim Sku As String, LeftSku As String, RightSku As String, GenericSku As String
 
     'Trouve la colonne "AVAILABLE TO SELL" dans Inventaire
     Inventaire.Worksheets("Produits à poches").Activate
@@ -274,12 +274,12 @@ Sub ToutesPochesToutesBases()
     'Pour chaque chandail à poche dans ImportFile, mettre à -100 si la base est en rupture d'inventaire
     For ligne = 2 To ImportFile.Worksheets(1).Cells(1, 1).CurrentRegion.Rows.Count
         Sku = ImportFile.Worksheets(1).Cells(ligne, 14)
-        LeftSku = Left(Sku,5)
+        LeftSku = Left(Sku, 5)
         If Left(LeftSku, 3) = "212" Then LeftSku = Replace(LeftSku, "212", "312") 'Convertir VPN 212 à VPN 312
-        RightSku = Right(Sku,2)
+        RightSku = Right(Sku, 2)
         GenericSku = LeftSku & "XXXX-" & RightSku
-        qt = Application.VLookup( _
-            GenericSku, Inventaire.Worksheets("Produits à poches").Range("A5:Z500"), ColAvailToSell, False)
+        qt = Application.VLookup(GenericSku, Inventaire.Worksheets("Produits à poches").Range("A5:Z500"), ColAvailToSell, False)
+        If IsError(qt) = True Then qt = 0
         If qt <= 0 Then ImportFile.Worksheets(1).Cells(ligne, 17) = -100
     Next ligne
 
