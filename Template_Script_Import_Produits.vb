@@ -29,12 +29,12 @@ Sub ToutesPochesToutesBases()
     NomUser = InputBox("Quel est ton nom de user") 'INFO=Pour le filepath de sauvegarde
     NomFichier = Format(Date, "yyyy-mm-dd") & "_" & InputBox("Comment veux-tu appeler le fichier?") 'Pour le filename
     Workbooks.Add 'TODO=Intégrer l'argument Fileformat = xlCSVUTF8
-    ActiveWorkbook.SaveAs Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\004 Web\01Outils\01ImportationProduit\" & NomFichier
+    ActiveWorkbook.SaveAs Filename:="C:\Users\" & NomUser & "\pochesetfils.com\PUBLIC - Documents\004 ECOM\01Outils\01ImportationProduit\" & NomFichier
     Dim ImportFile As Workbook
     Set ImportFile = ActiveWorkbook
     Dim couleursadecliner As New Collection
     Dim couleursinterdites As New Collection
-    For Each m In Array(217) 'INFO=3 premiers chiffres des VPN à décliner 101, 203, 210, 212, 217, 301, 312, 501
+    For Each m In Array(101) 'INFO=3 premiers chiffres des VPN à décliner 101, 203, 210, 212, 217, 301, 312, 501
         'TODO=Intégrer db.csv au fichier d'import ??
         'FUTUREUSE=FichierImportProduit.Activate
         'FUTUREUSE=Worksheets("db").Activate
@@ -67,7 +67,7 @@ Sub ToutesPochesToutesBases()
             Set couleursadecliner = New Collection
             Set couleursinterdites = New Collection
             If m = 101 Or m = 501 Then 'INFO=Skip poches pour adulte
-                PochesPourAdultes = Array("0006", "0008", "0093", "0141", "C271", "C264", "C282", "C268")
+                PochesPourAdultes = Array("0006", "0141", "0203", "0206", "0253", "0263", "C264", "C268", "C271")
                 If IsInArray(Sheets("poches à décliner").Cells(I, 1), PochesPourAdultes) Then I = I + 1
             End If
             'TODO?=On pourrait déplacer les déclarations de k pour couleurs prioritaires et couleurs interdites à la racine du loop
@@ -117,7 +117,7 @@ Sub ToutesPochesToutesBases()
                     oVariant.Title = Sheets("poches à décliner").Cells(I, 3)
                     oVariant.Body_HTML = Sheets("poches à décliner").Cells(I, 4)
                     oVariant.Vendor = Replace(Sheets("poches à décliner").Cells(I, 5), "'", "_")
-                    x = "gender:" _
+                    oVariant.Tags = "gender:" _
                         & oStyle.tagsGenre _
                         & oStyle.tagsCollections _
                         & ", collection:" _
@@ -128,13 +128,14 @@ Sub ToutesPochesToutesBases()
                         If oStyle.gender = "femme" Then x = x & "-Femme"
                         If oStyle.gender = "enfant" Then x = x & "-Enfant"
                         If oStyle.gender = "bébé" Then x = x & "-Bebe"
-                        If Sheets("poches à décliner").Cells(I, 8) = "new" Then x = x & ", B2S19"
+                        If Sheets("poches à décliner").Cells(I, 8) = "new" Then x = x & ", collection:Nouveauté SS20"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" Then x = x & ", collection:Nouveauté"
+                        If Sheets("poches à décliner").Cells(I, 9) = "MTLENPOCHE" Then x = x & ", collection:Montréal en poche"
+                        If Sheets("poches à décliner").Cells(I, 10) = "Sunshine" Then x = x & ", collection:Sunshine"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "homme" Then x = x & ", collection:Homme - Nouvelles Poches"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "femme" Then x = x & ", collection:Femme - Nouvelles Poches"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then x = x & ", collection:Enfant - Nouvelles Poches"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "bébé" Then x = x & ", collection:Bébé - Nouvelles Poches"
-                    oVariant.Tags = x
                     oVariant.Published = "'true"
                     oVariant.Option1_Name = "Size"
                     oVariant.Option1_Value = Sheets("FR").Cells(j, 18)
@@ -211,7 +212,14 @@ Sub ToutesPochesToutesBases()
                     Sheets(oStyle.SheetName).Cells(n, 23) = "'true"
                     '---Inventaire des bases---
                     'On ajoute les bases qui ont une image de dos disponible
-                    If Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "312" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "212" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "203" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "217" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "301" Or Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "210" Then
+                    If Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "312" Or _
+                    Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "212" Or _
+                    Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "203" Or _
+                    Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "217" Or _
+                    Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "301" Or _
+                    Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "210" Or _
+                    Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "218" Or _
+                    Left(Sheets(oStyle.SheetName).Cells(n, 14), 3) = "319" Then
                         If Sheets(oStyle.SheetName).Cells(n - 1, 26) = 1 Then
                             Sheets(oStyle.SheetName).Cells(n, 25) = "https://raw.githubusercontent.com/poches-et-fils/volume8-images/master/" & oStyle.style_snake_case & "_" & couleur_snake_case & "_" & oStyle.GenderASCII & "-back.jpg"
                             Sheets(oStyle.SheetName).Cells(n, 26) = 2
