@@ -34,7 +34,7 @@ Sub ToutesPochesToutesBases()
     Set ImportFile = ActiveWorkbook
     Dim couleursadecliner As New Collection
     Dim couleursinterdites As New Collection
-    For Each m In Array(101) 'INFO=3 premiers chiffres des VPN à décliner 101, 203, 210, 212, 217, 301, 312, 501
+    For Each m In Array(501) 'INFO=3 premiers chiffres des VPN à décliner 101, 203, 210, 212, 217, 301, 312, 501
         'TODO=Intégrer db.csv au fichier d'import ??
         'FUTUREUSE=FichierImportProduit.Activate
         'FUTUREUSE=Worksheets("db").Activate
@@ -67,7 +67,7 @@ Sub ToutesPochesToutesBases()
             Set couleursadecliner = New Collection
             Set couleursinterdites = New Collection
             If m = 101 Or m = 501 Then 'INFO=Skip poches pour adulte
-                PochesPourAdultes = Array("0006", "0141", "0203", "0206", "0253", "0263", "C264", "C268", "C271")
+                PochesPourAdultes = Array("0006", "0141", "0203", "0206", "0253", "0263", "280", "281", "282", "C264", "C268", "C271")
                 If IsInArray(Sheets("poches à décliner").Cells(I, 1), PochesPourAdultes) Then I = I + 1
             End If
             'TODO?=On pourrait déplacer les déclarations de k pour couleurs prioritaires et couleurs interdites à la racine du loop
@@ -117,7 +117,7 @@ Sub ToutesPochesToutesBases()
                     oVariant.Title = Sheets("poches à décliner").Cells(I, 3)
                     oVariant.Body_HTML = Sheets("poches à décliner").Cells(I, 4)
                     oVariant.Vendor = Replace(Sheets("poches à décliner").Cells(I, 5), "'", "_")
-                    oVariant.Tags = "gender:" _
+                    x = "gender:" _
                         & oStyle.tagsGenre _
                         & oStyle.tagsCollections _
                         & ", collection:" _
@@ -136,6 +136,7 @@ Sub ToutesPochesToutesBases()
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "femme" Then x = x & ", collection:Femme - Nouvelles Poches"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "enfant" Then x = x & ", collection:Enfant - Nouvelles Poches"
                         If Sheets("poches à décliner").Cells(I, 8) = "new" And oStyle.gender = "bébé" Then x = x & ", collection:Bébé - Nouvelles Poches"
+                    oVariant.Tags = x
                     oVariant.Published = "'true"
                     oVariant.Option1_Name = "Size"
                     oVariant.Option1_Value = Sheets("FR").Cells(j, 18)

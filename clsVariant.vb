@@ -17,3 +17,4 @@ Public Variant_Fulfillment_Service as String
 Public Variant_Requires_Shipping as String
 Public Variant_Taxable as String
 Public Image_Src as String
+Public Image_Position as String
